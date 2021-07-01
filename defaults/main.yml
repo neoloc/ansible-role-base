@@ -1,0 +1,6 @@
+---
+# defaults file for role
+
+default_base:
+  dns:
+    forwarder: 8.8.8.8

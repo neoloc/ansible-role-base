@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+# Do not change file directly, changes will be overwritten.
+#
+{% if base.dns.searchdomain is defined %}
+search {{ base.dns.searchdomain }}
+{% endif %}
+{% if base.dns.forwarders is defined %}
+{% for item in base.dns.forwarders %}
+nameserver {{ item }}
+{%endfor%}
+{% else %}
+nameserver {{ default_base.dns.forwarder }}
+{% endif %}

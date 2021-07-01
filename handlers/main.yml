@@ -1,0 +1,6 @@
+---
+# handlers file for role
+#
+
+- name: reboot machine
+  reboot: reboot_timeout=600

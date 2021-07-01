@@ -1,0 +1,38 @@
+---
+# tasks file for role
+#
+
+- name: Set the systems hostname
+  ansible.builtin.hostname:
+    name: "{{ base.fqdn }}"
+  notify: reboot machine
+  tags: [ base,dns ]
+
+- name: Deploy /etc/hosts file from template
+  ansible.builtin.template:
+    src: templates/etc/hosts.j2
+    dest: /etc/hosts
+  tags: [ base,dns ]
+
+- name: Check if /etc/resolv.conf is a symlink
+  ansible.builtin.stat:
+    path: /etc/resolv.conf
+  register: resolv_link
+  tags: [ base,dns ]
+
+- name: Remove /etc/resolv.conf symlink
+  ansible.builtin.file:
+    name: /etc/resolv.conf
+    state: absent
+  when: resolv_link.stat.islnk is defined and resolv_link.stat.islnk
+  register: resolv_link_removed
+  tags: [ base,dns ]
+
+- name: Deploy /etc/resolv.conf file from template
+  ansible.builtin.template:
+    src: templates/etc/resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '644'
+  tags: [ base,dns ]
