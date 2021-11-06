@@ -8,12 +8,6 @@
   notify: reboot machine
   tags: [ base,dns ]
 
-- name: Deploy /etc/hosts file from template
-  ansible.builtin.template:
-    src: templates/etc/hosts.j2
-    dest: /etc/hosts
-  tags: [ base,dns ]
-
 - name: Check if /etc/resolv.conf is a symlink
   ansible.builtin.stat:
     path: /etc/resolv.conf
